@@ -45,7 +45,7 @@ for i in dados:
         texto = texto[posicao+2:]
         linha[5] = 1
 
-    linha[1] = 1 if ('bozo' in texto.lower()
+    linha[1] = 1 if ('jair bolsonaro' in texto.lower()
                      or 'bolsonaro' in texto.lower()) else 0
     linha[2] = 1 if ('lula' in texto.lower()) else 0
     linha[3] = 1 if ('ciro gomes' in texto.lower()
@@ -88,7 +88,17 @@ display(base2)
 # %%
 display(base2[['pessoas', 'comentarios', 'perc_form', 'perc_acum_form']])
 # %%
-api.search_recent_tweets(query='tebet', max_results=100,
+dados = api.get_recent_tweets_count(query=['bolsonaro', 'lula', 'ciro'],
                          start_time=start, end_time=end)
 
 
+
+# %%
+
+# %%
+dados = dados.data
+# %%
+type(dados)
+# %%
+dados[0:10]
+# %%

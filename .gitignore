@@ -127,3 +127,9 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Todo List
+.todo
+
+# Txt
+sketch.txt

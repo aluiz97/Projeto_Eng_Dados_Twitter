@@ -10,10 +10,7 @@ api_key_secret = str(getenv('api_key_secret'))
 access_token = str(getenv('access_token'))
 access_token_secret = str(getenv('access_token_secret'))
 bearer_token = str(getenv('bearer_token'))
-# %%
-#stream = tw.Stream(api_key, api_key_secret, access_token, access_token_secret)
-#auth = tw.OAuth2BearerHandler(bearer_token)
-#auth.set_access_token(access_token, access_token_secret)
+
 # %%
 api = tw.Client(bearer_token=bearer_token,
                 consumer_key=api_key,
@@ -22,12 +19,12 @@ api = tw.Client(bearer_token=bearer_token,
                 access_token_secret=access_token_secret)
 #public_tweets = api.home_timeline()
 # %%
-start = '2022-09-26T19:39:01Z'
-end = '2022-10-02T19:40:01Z'
+start = '2022-09-26T23:39:01Z'
+end = '2022-10-02T23:40:01Z'
 # %%
 
 resposta = api.search_recent_tweets(
-    query='eleição', max_results=100, start_time=start, end_time=end)
+    query='tebet', max_results=100, start_time=start, end_time=end)
 # %%
 dados = resposta.data
 
@@ -48,7 +45,7 @@ for i in dados:
         texto = texto[posicao+2:]
         linha[5] = 1
 
-    linha[1] = 1 if ('jair bolsonaro' in texto.lower()
+    linha[1] = 1 if ('bozo' in texto.lower()
                      or 'bolsonaro' in texto.lower()) else 0
     linha[2] = 1 if ('lula' in texto.lower()) else 0
     linha[3] = 1 if ('ciro gomes' in texto.lower()
@@ -91,3 +88,7 @@ display(base2)
 # %%
 display(base2[['pessoas', 'comentarios', 'perc_form', 'perc_acum_form']])
 # %%
+api.search_recent_tweets(query='tebet', max_results=100,
+                         start_time=start, end_time=end)
+
+

@@ -1,5 +1,5 @@
 # %%
-import datetime
+from datetime import datetime, timedelta
 from abc import ABC, abstractmethod
 import tweepy as tw
 from dotenv import load_dotenv
@@ -9,26 +9,40 @@ from os import getenv
 # %%
 load_dotenv('/home/antonio-linux/PROJETOS/Projeto_Eng_Dados_Twitter/.env')
 
-api_key = str(getenv('api_key'))
-api_key_secret = str(getenv('api_key_secret'))
-access_token = str(getenv('access_token'))
-access_token_secret = str(getenv('access_token_secret'))
-bearer_token = str(getenv('bearer_token'))
+
 
 # %%
-api = tw.Client(bearer_token=bearer_token,
-                consumer_key=api_key,
-                consumer_secret=api_key_secret,
-                access_token=access_token,
-                access_token_secret=access_token_secret)
-#public_tweets = api.home_timeline()
-# %%
-class TwitterAPI(ABC):
+class Twitter(ABC):
 
     def __init__(self) -> None:
-        super().__init__()
 
-    #start = '2022-09-26T23:39:01Z'
-    #end = '2022-10-02T23:40:01Z'
-    #resposta = api.search_recent_tweets(
-#    query='minas gerais', max_results=100, start_time=start, end_time=end)
+        self.consumer_key = str(getenv('consumer_key'))
+        self.consumer_secret = str(getenv('consumer_secret'))
+        self.access_token = str(getenv('access_token'))
+        self.access_token_secret = str(getenv('access_token_secret'))
+        self.bearer_token = str(getenv('bearer_token'))
+
+        self.client = tw.Client(bearer_token=self.bearer_token,
+                        consumer_key=self.consumer_key,
+                        consumer_secret=self.consumer_secret,
+                        access_token=self.access_token,
+                        access_token_secret=self.access_token_secret)
+
+    @abstractmethod
+    def _get_api(self, **kwargs) -> None:
+        pass
+
+
+# %%
+class TwitterApi(Twitter):
+
+    def _get_api(self, query: str, max_results: int) -> None:
+
+        return self.client.search_recent_tweets(
+            query=query, max_results=max_results, start_time=datetime.today() - timedelta(days=4), end_time=datetime.today())
+
+# %%
+twitterApi = TwitterApi
+# %%
+api = twitterApi._get_api(twitterApi,'Barcelona', 100)
+# %%

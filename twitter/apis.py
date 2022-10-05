@@ -1,7 +1,7 @@
 # %%
 from datetime import datetime, timedelta
 from abc import ABC, abstractmethod
-import tweepy as tw
+import twitter as tw
 from dotenv import load_dotenv
 import pandas as pd
 from os import getenv
@@ -18,11 +18,12 @@ class Twitter(ABC):
     access_token_secret = str(getenv('access_token_secret'))
     bearer_token = str(getenv('bearer_token'))
 
-    client = tw.Client(bearer_token=bearer_token,
-                            consumer_key=consumer_key,
-                            consumer_secret=consumer_secret,
-                            access_token=access_token,
-                            access_token_secret=access_token_secret)
+    auth = tw.oauth.OAuth(access_token,
+                          access_token_secret,
+                          consumer_key,
+                          consumer_secret)
+
+    client = tw.Twitter(auth=auth)
 
     @abstractmethod
     def __init__(self, **kwargs) -> None:
@@ -36,18 +37,17 @@ class Twitter(ABC):
 # %%
 class TwitterApi(Twitter):
 
-    def __init__(self, query: str, max_results: int, final_day: int, initial_day: int) -> None:
+    def __init__(self, query: str, max_results: int) -> None:
 
         self.query = query
         self.max_results = max_results
-        self.final_day = final_day
-        self.initial_day = initial_day
     
     def _get_api(self):
 
-        return self.client.search_recent_tweets(
-            query=self.query, max_results=self.max_results,
-            start_time=datetime.today() - timedelta(days=self.initial_day), end_time=datetime.today() - timedelta(days=self.final_day))
+        return self.client.search.tweets(
+            q=self.query, count=self.max_results)
 
 # %%
 
+api = TwitterApi('Champions', 50)._get_api()
+# %%

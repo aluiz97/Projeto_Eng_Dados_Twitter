@@ -1,6 +1,9 @@
 # %%
-import apis
+import scrape
+from datetime import date
 
 # %%
-api = apis.TwitterApi('Champions League', 100)._get_api()
+scrape_tw = scrape.TwitterScrape('Ukraine', date(2022, 10, 5), date(2022, 10, 8))
+# %%
+data = scrape_tw.get_data(500)
 # %%
